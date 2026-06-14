@@ -8,6 +8,7 @@ import {
   SendIcon,
   SettingsIcon,
   XIcon,
+  LockIcon,
   LoaderIcon,
 } from "lucide-react";
 
@@ -26,7 +27,81 @@ function today() {
 
 type PublishStatus = "idle" | "loading" | "success" | "error";
 
+const ADMIN_USER = "ferozkhan";
+const ADMIN_PASS = "88323Feroz.Khan";
+
+function LoginScreen({ onLogin }: { onLogin: () => void }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      sessionStorage.setItem("admin_auth", "1");
+      onLogin();
+    } else {
+      setError(true);
+    }
+  }
+
+  return (
+    <main className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-violet-900/20 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
+            <LockIcon className="w-6 h-6 text-violet-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-white">Admin Login</h1>
+          <p className="text-gray-400 text-sm mt-1">Ficiali Blog Admin</p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => { setUsername(e.target.value); setError(false); }}
+              autoComplete="username"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              autoComplete="current-password"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
+            />
+          </div>
+          {error && (
+            <p className="text-red-400 text-sm text-center">Invalid username or password.</p>
+          )}
+          <button
+            type="submit"
+            className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
+    </main>
+  );
+}
+
 export default function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    setAuthenticated(sessionStorage.getItem("admin_auth") === "1");
+    setAuthChecked(true);
+  }, []);
+
+  if (!authChecked) return null;
+  if (!authenticated) return <LoginScreen onLogin={() => setAuthenticated(true)} />;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("Feroz Khan");
