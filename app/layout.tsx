@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import SoftBackdrop from "@/components/SoftBackdrop";
 import { Metadata } from "next";
 import WhatsappButton from "@/components/WhatsappButton";
-import Script from "next/script";
 
 const outfit = Outfit({
   variable: "--font-sans",
@@ -69,11 +68,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7233895943371921"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
       </head>
       <body>
