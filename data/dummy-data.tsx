@@ -186,6 +186,7 @@ export const footerLinks = [
     links: [
       { name: "Home", url: "/#" },
       { name: "Services", url: "/#services" },
+      { name: "Blog", url: "/blog" },
       { name: "About Us", url: "/about-us" },
       { name: "Contact Us", url: "/#contact-us" },
     ],

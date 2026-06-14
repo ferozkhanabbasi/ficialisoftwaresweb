@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: [], // Hide private elite areas
+      disallow: ["/admin"],
     },
     sitemap: "https://ficialisoftwares.com/sitemap.xml",
   };
