@@ -35,8 +35,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function handleClick() {
     if (username === ADMIN_USER && password === ADMIN_PASS) {
       sessionStorage.setItem("admin_auth", "1");
       onLogin();
@@ -55,13 +54,14 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
           <h1 className="text-2xl font-bold text-white">Admin Login</h1>
           <p className="text-gray-400 text-sm mt-1">Ficiali Blog Admin</p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => { setUsername(e.target.value); setError(false); }}
+              onKeyDown={(e) => e.key === "Enter" && handleClick()}
               autoComplete="username"
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
             />
@@ -72,6 +72,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
               type="password"
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              onKeyDown={(e) => e.key === "Enter" && handleClick()}
               autoComplete="current-password"
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
             />
@@ -80,12 +81,13 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
             <p className="text-red-400 text-sm text-center">Invalid username or password.</p>
           )}
           <button
-            type="submit"
+            type="button"
+            onClick={handleClick}
             className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"
           >
             Sign In
           </button>
-        </form>
+        </div>
       </div>
     </main>
   );
