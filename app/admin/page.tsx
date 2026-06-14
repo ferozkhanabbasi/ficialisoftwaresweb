@@ -30,80 +30,67 @@ type PublishStatus = "idle" | "loading" | "success" | "error";
 const ADMIN_USER = "ferozkhan";
 const ADMIN_PASS = "88323Feroz.Khan";
 
-function LoginScreen({ onLogin }: { onLogin: () => void }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+export default function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loginUser, setLoginUser] = useState("");
+  const [loginPass, setLoginPass] = useState("");
+  const [loginError, setLoginError] = useState(false);
 
-  function handleClick() {
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      sessionStorage.setItem("admin_auth", "1");
-      onLogin();
+  function handleLogin() {
+    if (loginUser === ADMIN_USER && loginPass === ADMIN_PASS) {
+      setAuthenticated(true);
     } else {
-      setError(true);
+      setLoginError(true);
     }
   }
 
-  return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-violet-900/20 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
-            <LockIcon className="w-6 h-6 text-violet-400" />
+  if (!authenticated) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 rounded-2xl bg-violet-900/20 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
+              <LockIcon className="w-6 h-6 text-violet-400" />
+            </div>
+            <h1 className="text-2xl font-bold text-white">Admin Login</h1>
+            <p className="text-gray-400 text-sm mt-1">Ficiali Blog Admin</p>
           </div>
-          <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-          <p className="text-gray-400 text-sm mt-1">Ficiali Blog Admin</p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
+              <input
+                type="text"
+                value={loginUser}
+                onChange={(e) => { setLoginUser(e.target.value); setLoginError(false); }}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+              <input
+                type="password"
+                value={loginPass}
+                onChange={(e) => { setLoginPass(e.target.value); setLoginError(false); }}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
+              />
+            </div>
+            {loginError && (
+              <p className="text-red-400 text-sm text-center">Invalid username or password.</p>
+            )}
+            <button
+              type="button"
+              onClick={handleLogin}
+              className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => { setUsername(e.target.value); setError(false); }}
-              onKeyDown={(e) => e.key === "Enter" && handleClick()}
-              autoComplete="username"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => { setPassword(e.target.value); setError(false); }}
-              onKeyDown={(e) => e.key === "Enter" && handleClick()}
-              autoComplete="current-password"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500/50 transition"
-            />
-          </div>
-          {error && (
-            <p className="text-red-400 text-sm text-center">Invalid username or password.</p>
-          )}
-          <button
-            type="button"
-            onClick={handleClick}
-            className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-export default function AdminPage() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
-
-  useEffect(() => {
-    setAuthenticated(sessionStorage.getItem("admin_auth") === "1");
-    setAuthChecked(true);
-  }, []);
-
-  if (!authChecked) return null;
-  if (!authenticated) return <LoginScreen onLogin={() => setAuthenticated(true)} />;
+      </main>
+    );
+  }
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("Feroz Khan");
